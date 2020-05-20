@@ -11,7 +11,7 @@
 
 # ## _Setup_ geral
 
-# In[1]:
+# In[2]:
 
 
 import pandas as pd
@@ -22,7 +22,7 @@ import seaborn as sns
 import statsmodels.api as sm
 
 
-# In[2]:
+# In[3]:
 
 
 #%matplotlib inline
@@ -35,13 +35,13 @@ figsize(12, 8)
 sns.set()
 
 
-# In[3]:
+# In[4]:
 
 
 athletes = pd.read_csv("athletes.csv")
 
 
-# In[4]:
+# In[5]:
 
 
 def get_sample(df, col_name, n=100, seed=42):
@@ -83,7 +83,7 @@ def get_sample(df, col_name, n=100, seed=42):
 
 
 
-# In[5]:
+# In[6]:
 
 
 # Sua análise começa aqui.
@@ -97,7 +97,7 @@ else:
     print('FALSE')
 
 
-# In[6]:
+# In[7]:
 
 
 amostra_weight = get_sample(athletes, 'weight',3000)
@@ -121,7 +121,7 @@ else:
 # 
 # Considerando uma amostra de tamanho 3000 da coluna `height` obtida com a função `get_sample()`, execute o teste de normalidade de Shapiro-Wilk com a função `scipy.stats.shapiro()`. Podemos afirmar que as alturas são normalmente distribuídas com base nesse teste (ao nível de significância de 5%)? Responda com um boolean (`True` ou `False`).
 
-# In[7]:
+# In[8]:
 
 
 def q1():
@@ -131,7 +131,7 @@ def q1():
     return bool(p_value > alpha)
 
 
-# In[8]:
+# In[9]:
 
 
 q1()
@@ -147,7 +147,7 @@ q1()
 # 
 # Repita o mesmo procedimento acima, mas agora utilizando o teste de normalidade de Jarque-Bera através da função `scipy.stats.jarque_bera()`. Agora podemos afirmar que as alturas são normalmente distribuídas (ao nível de significância de 5%)? Responda com um boolean (`True` ou `False`).
 
-# In[9]:
+# In[10]:
 
 
 def q2():
@@ -157,7 +157,7 @@ def q2():
     return bool(p_value > alpha)
 
 
-# In[10]:
+# In[11]:
 
 
 q2()
@@ -171,7 +171,7 @@ q2()
 # 
 # Considerando agora uma amostra de tamanho 3000 da coluna `weight` obtida com a função `get_sample()`. Faça o teste de normalidade de D'Agostino-Pearson utilizando a função `scipy.stats.normaltest()`. Podemos afirmar que os pesos vêm de uma distribuição normal ao nível de significância de 5%? Responda com um boolean (`True` ou `False`).
 
-# In[11]:
+# In[12]:
 
 
 def q3():
@@ -181,7 +181,7 @@ def q3():
     return bool(p_value > alpha)
 
 
-# In[12]:
+# In[13]:
 
 
 q3()
@@ -196,7 +196,7 @@ q3()
 # 
 # Realize uma transformação logarítmica em na amostra de `weight` da questão 3 e repita o mesmo procedimento. Podemos afirmar a normalidade da variável transformada ao nível de significância de 5%? Responda com um boolean (`True` ou `False`).
 
-# In[13]:
+# In[14]:
 
 
 def q4():
@@ -207,7 +207,7 @@ def q4():
     return bool(p_value > alpha)
 
 
-# In[14]:
+# In[15]:
 
 
 q4()
@@ -224,28 +224,28 @@ q4()
 # 
 # Obtenha todos atletas brasileiros, norte-americanos e canadenses em `DataFrame`s chamados `bra`, `usa` e `can`,respectivamente. Realize um teste de hipóteses para comparação das médias das alturas (`height`) para amostras independentes e variâncias diferentes com a função `scipy.stats.ttest_ind()` entre `bra` e `usa`. Podemos afirmar que as médias são estatisticamente iguais? Responda com um boolean (`True` ou `False`).
 
-# In[15]:
+# In[16]:
 
 
-athletes_bra = athletes[['nationality', 'height']].loc[athletes['nationality'] == 'BRA'].dropna()
-athletes_usa = athletes[['nationality', 'height']].loc[athletes['nationality'] == 'USA'].dropna()
-athletes_can = athletes[['nationality', 'height']].loc[athletes['nationality'] == 'CAN'].dropna()
+athletes_bra = athletes[['nationality', 'height']].loc[athletes['nationality'] == 'BRA']
+athletes_usa = athletes[['nationality', 'height']].loc[athletes['nationality'] == 'USA']
+athletes_can = athletes[['nationality', 'height']].loc[athletes['nationality'] == 'CAN']
 print(athletes_bra.shape[0])
 print(athletes_usa.shape[0])
 print(athletes_can.shape[0])
 print(athletes.shape[0])
 
 
-# In[16]:
+# In[24]:
 
 
 def q5():
     alpha = .05
-    test, p_value = sct.ttest_ind(athletes_bra['height'], athletes_usa['height'], equal_var = False)
+    test, p_value = sct.ttest_ind(athletes_bra['height'], athletes_usa['height'], equal_var = False, nan_policy='omit')
     return bool(p_value > alpha)
 
 
-# In[17]:
+# In[25]:
 
 
 q5()
@@ -255,16 +255,16 @@ q5()
 # 
 # Repita o procedimento da questão 5, mas agora entre as alturas de `bra` e `can`. Podemos afimar agora que as médias são estatisticamente iguais? Reponda com um boolean (`True` ou `False`).
 
-# In[18]:
+# In[26]:
 
 
 def q6():
     alpha = .05
-    test, p_value = sct.ttest_ind(athletes_bra['height'], athletes_can['height'], equal_var = False)
+    test, p_value = sct.ttest_ind(athletes_bra['height'], athletes_can['height'], equal_var = False, nan_policy='omit')
     return bool(p_value > alpha)
 
 
-# In[19]:
+# In[27]:
 
 
 q6()
@@ -274,16 +274,16 @@ q6()
 # 
 # Repita o procedimento da questão 6, mas agora entre as alturas de `usa` e `can`. Qual o valor do p-valor retornado? Responda como um único escalar arredondado para oito casas decimais.
 
-# In[20]:
+# In[32]:
 
 
 def q7():
     alpha = .05
-    test, p_value = sct.ttest_ind(athletes_usa['height'], athletes_can['height'], equal_var = False)
+    test, p_value = sct.ttest_ind(athletes_usa['height'], athletes_can['height'], equal_var = False, nan_policy='omit')
     return float(np.around(p_value,8))
 
 
-# In[21]:
+# In[33]:
 
 
 q7()
